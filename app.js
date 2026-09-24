@@ -78,7 +78,7 @@
 
   function renderCounts() {
     const available = bank[state.category]?.length || 0;
-    if (state.count !== "all" && state.count > available) state.count = Math.min(50, available);
+    if (state.count !== "all" && state.count > available) state.count = "all";
     els.countGrid.innerHTML = allowedCounts.map((count) => {
       const disabled = count !== "all" && count > available;
       const label = count === "all" ? `Все · ${available}` : count;
