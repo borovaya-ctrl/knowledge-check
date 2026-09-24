@@ -153,6 +153,22 @@
     return div.innerHTML;
   }
 
+  function revealNextQuestionButton() {
+    requestAnimationFrame(() => {
+      const buttonRect = els.nextQuestion.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const isOutsideViewport = buttonRect.bottom > viewportHeight - 16 || buttonRect.top < 16;
+
+      if (!isOutsideViewport) return;
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      els.nextQuestion.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "center",
+      });
+    });
+  }
+
   function chooseAnswer(selectedIndex) {
     if (state.locked) return;
     state.locked = true;
@@ -184,6 +200,7 @@
     els.nextQuestion.textContent = state.currentIndex === state.questions.length - 1 ? "Показать результат" : "Следующий вопрос →";
     els.nextQuestion.classList.remove("is-hidden");
     els.nextQuestion.focus({ preventScroll: true });
+    revealNextQuestionButton();
   }
 
   function advance() {

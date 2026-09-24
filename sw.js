@@ -1,4 +1,4 @@
-const CACHE_NAME = "knowledge-check-v5";
+const CACHE_NAME = "knowledge-check-v6";
 const CACHE_PREFIX = "knowledge-check-";
 const APP_FILES = [
   "./",
