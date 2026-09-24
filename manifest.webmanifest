@@ -1,0 +1,25 @@
+{
+  "name": "Проверка знаний",
+  "short_name": "Знания",
+  "description": "Тренажёр для проверки знаний по восьми категориям аттестации",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f7fb",
+  "theme_color": "#071a36",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

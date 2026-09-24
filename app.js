@@ -260,4 +260,14 @@
 
   renderCategories();
   renderCounts();
+
+  const offlineNote = document.querySelector("#offline-note");
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    navigator.serviceWorker.register("./sw.js").then(() => navigator.serviceWorker.ready).then(() => {
+      offlineNote.classList.add("is-ready");
+      offlineNote.innerHTML = '<span aria-hidden="true">✓</span> Офлайн-режим готов на этом устройстве';
+    }).catch(() => {
+      offlineNote.textContent = "Офлайн-режим станет доступен после повторного открытия приложения";
+    });
+  }
 })();
