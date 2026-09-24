@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Тренажёр для проверки знаний по категориям Р1, Р2, Р3.1 и Р3.2" />
+    <meta name="theme-color" content="#071a36" />
+    <title>Проверка знаний</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="brand" id="brand-button" type="button" aria-label="На главную">
+          <span class="brand-mark" aria-hidden="true">✓</span>
+          <span>Проверка знаний</span>
+        </button>
+        <div class="test-meta is-hidden" id="test-meta" aria-live="polite">
+          <span class="meta-category" id="meta-category"></span>
+          <span class="meta-score"><b id="meta-correct">0</b> верно</span>
+        </div>
+      </header>
+
+      <main id="app" tabindex="-1">
+        <section class="screen setup-screen" id="setup-screen">
+          <div class="setup-intro">
+            <p class="eyebrow">Тренажёр аттестации</p>
+            <h1>Выберите параметры теста</h1>
+            <p class="intro-copy">Ответьте на вопросы своей категории и сразу увидите, где допустили ошибку.</p>
+          </div>
+
+          <form class="setup-grid" id="setup-form">
+            <fieldset class="setup-block category-block">
+              <legend><span>1</span> Категория знаний</legend>
+              <div class="category-grid" id="category-grid"></div>
+            </fieldset>
+
+            <fieldset class="setup-block count-block">
+              <legend><span>2</span> Количество вопросов</legend>
+              <div class="choice-grid count-grid" id="count-grid"></div>
+            </fieldset>
+
+            <fieldset class="setup-block order-block">
+              <legend><span>3</span> Порядок вопросов</legend>
+              <div class="segmented-control">
+                <label>
+                  <input type="radio" name="order" value="sequential" checked />
+                  <span><b>По порядку</b><small>Как в исходном перечне</small></span>
+                </label>
+                <label>
+                  <input type="radio" name="order" value="random" />
+                  <span><b>Случайно</b><small>Новая выборка каждый раз</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="start-panel">
+              <div>
+                <span class="start-summary-label">Вы выбрали</span>
+                <strong id="start-summary">Р1 · 10 вопросов · по порядку</strong>
+              </div>
+              <button class="primary-button" type="submit">Начать тест <span aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </section>
+
+        <section class="screen test-screen is-hidden" id="test-screen" aria-labelledby="question-title">
+          <div class="progress-wrap">
+            <div class="progress-labels">
+              <span id="progress-copy">Вопрос 1 из 10</span>
+              <span id="progress-percent">10%</span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Ход теста" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="progress-bar"></span>
+            </div>
+          </div>
+
+          <article class="question-card">
+            <div class="question-number" id="question-number">Вопрос 1</div>
+            <h2 id="question-title"></h2>
+            <div class="answers" id="answers"></div>
+            <div class="question-feedback is-hidden" id="question-feedback" role="status"></div>
+          </article>
+
+          <div class="test-actions">
+            <button class="text-button danger-text" id="finish-early" type="button">Завершить досрочно</button>
+            <button class="primary-button next-button is-hidden" id="next-question" type="button">Следующий вопрос <span aria-hidden="true">→</span></button>
+          </div>
+        </section>
+
+        <section class="screen results-screen is-hidden" id="results-screen" aria-labelledby="results-title">
+          <div class="result-hero">
+            <div class="score-ring" id="score-ring" aria-label="Результат теста">
+              <strong id="score-percent">0%</strong>
+              <span>правильных</span>
+            </div>
+            <div class="result-copy">
+              <p class="eyebrow" id="result-category">Категория Р1</p>
+              <h1 id="results-title">Тест завершён</h1>
+              <p id="result-message"></p>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card correct-stat">
+              <span class="stat-icon" aria-hidden="true">✓</span>
+              <div><strong id="result-correct">0</strong><span>правильных ответов</span></div>
+            </article>
+            <article class="stat-card wrong-stat">
+              <span class="stat-icon" aria-hidden="true">×</span>
+              <div><strong id="result-wrong">0</strong><span>неправильных ответов</span></div>
+            </article>
+            <article class="stat-card neutral-stat">
+              <span class="stat-icon" aria-hidden="true">○</span>
+              <div><strong id="result-unanswered">0</strong><span>без ответа</span></div>
+            </article>
+          </div>
+
+          <div class="result-actions">
+            <button class="secondary-button is-hidden" id="retry-wrong" type="button">Повторить ошибки</button>
+            <button class="primary-button" id="new-test" type="button">Новый тест <span aria-hidden="true">→</span></button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="confirm-dialog" id="finish-dialog">
+      <form method="dialog">
+        <div class="dialog-icon" aria-hidden="true">!</div>
+        <h2>Завершить тест?</h2>
+        <p>Неотвеченные вопросы попадут в итоговую статистику.</p>
+        <div class="dialog-actions">
+          <button class="secondary-button" value="cancel">Продолжить тест</button>
+          <button class="danger-button" value="confirm">Завершить</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="questions-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
