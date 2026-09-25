@@ -10,6 +10,7 @@
     count: 10,
     order: "sequential",
     questions: [],
+    currentAnswers: [],
     currentIndex: 0,
     answers: [],
     locked: false,
@@ -123,9 +124,11 @@
 
   function renderQuestion() {
     const question = state.questions[state.currentIndex];
+    const answerLabels = question.answers.map((answer) => answer.label);
     const position = state.currentIndex + 1;
     const percent = Math.round((state.currentIndex / state.questions.length) * 100);
     state.locked = false;
+    state.currentAnswers = shuffle(question.answers);
     els.progressCopy.textContent = `Вопрос ${position} из ${state.questions.length}`;
     els.progressPercent.textContent = `${percent}%`;
     els.progressBar.style.width = `${percent}%`;
@@ -135,9 +138,9 @@
     els.feedback.className = "question-feedback is-hidden";
     els.feedback.textContent = "";
     els.nextQuestion.classList.add("is-hidden");
-    els.answers.innerHTML = question.answers.map((answer, index) => `
+    els.answers.innerHTML = state.currentAnswers.map((answer, index) => `
       <button class="answer-button" type="button" data-answer-index="${index}">
-        <span class="answer-letter">${answer.label}</span>
+        <span class="answer-letter">${answerLabels[index]}</span>
         <span class="answer-text">${escapeHtml(answer.text)}</span>
         <span class="answer-state" aria-hidden="true"></span>
       </button>
@@ -173,7 +176,7 @@
     if (state.locked) return;
     state.locked = true;
     const question = state.questions[state.currentIndex];
-    const correctIndex = question.answers.findIndex((answer) => answer.correct);
+    const correctIndex = state.currentAnswers.findIndex((answer) => answer.correct);
     const isCorrect = selectedIndex === correctIndex;
     state.answers.push({ question, selectedIndex, correctIndex, isCorrect });
 
@@ -241,6 +244,7 @@
 
   function resetToSetup() {
     state.questions = [];
+    state.currentAnswers = [];
     state.answers = [];
     showScreen("setup");
   }
